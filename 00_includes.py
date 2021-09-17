@@ -29,7 +29,7 @@ telco_preds_tbl_name = 'telco_preds'
 
 # Delete the old database and tables if needed
 # uncomment if you need a reset
-# _ = spark.sql('DROP DATABASE IF EXISTS {} CASCADE'.format(database_name))
+_ = spark.sql('DROP DATABASE IF EXISTS {} CASCADE'.format(database_name))
 
 
 # Create database to house tables

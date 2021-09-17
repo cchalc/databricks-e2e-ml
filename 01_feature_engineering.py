@@ -6,6 +6,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./00_includes
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ### Featurization Logic
 # MAGIC 
@@ -14,7 +18,7 @@
 # COMMAND ----------
 
 # Read into Spark
-telcoDF = spark.table("cchalc_e2e.bronze_customers")
+telcoDF = spark.table(f"{database_name}.bronze_customers")
 
 display(telcoDF)
 
