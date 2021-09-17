@@ -29,7 +29,7 @@ from pyspark.sql.functions import col, when
 from pyspark.sql.types import StructType,StructField,DoubleType, StringType, IntegerType, FloatType
 
 # Set config for database name, file paths, and table names
-database_name = 'ibm_telco_churn'
+database_name = 'cchalc_e2eml'
 
 # Move file from driver to DBFS
 user = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().apply('user')
@@ -51,11 +51,23 @@ telco_preds_tbl_name = 'telco_preds'
 _ = spark.sql('DROP DATABASE IF EXISTS {} CASCADE'.format(database_name))
 
 # Create database to house tables
-_ = spark.sql('CREATE DATABASE {}'.format(database_name))
+# _ = spark.sql('CREATE DATABASE {}'.format(database_name))
 # Drop any old delta lake files if needed (e.g. re-running this notebook with the same bronze_tbl_path and silver_tbl_path)
 shutil.rmtree('/dbfs'+bronze_tbl_path, ignore_errors=True)
 shutil.rmtree('/dbfs'+silver_tbl_path, ignore_errors=True)
 shutil.rmtree('/dbfs'+telco_preds_path, ignore_errors=True)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC CREATE DATABASE IF NOT EXISTS cchalc_e2eml
+# MAGIC     COMMENT "CREATE A DATABASE WITH A LOCATION PATH"
+# MAGIC     LOCATION "/Users/christopher.chalcraft@databricks.com/databases/cchalc_e2eml" --this must be a location on dbfs (i.e. not direct access)
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC USE cchalc_e2eml
 
 # COMMAND ----------
 
