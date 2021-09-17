@@ -27,20 +27,6 @@ telco_preds_tbl_name = 'telco_preds'
 
 # COMMAND ----------
 
-# Delete the old database and tables if needed
-# uncomment if you need a reset
-_ = spark.sql('DROP DATABASE IF EXISTS {} CASCADE'.format(database_name))
-
-
-# Create database to house tables
-# _ = spark.sql('CREATE DATABASE {}'.format(database_name))
-# Drop any old delta lake files if needed (e.g. re-running this notebook with the same bronze_tbl_path and silver_tbl_path)
-shutil.rmtree('/dbfs'+bronze_tbl_path, ignore_errors=True)
-shutil.rmtree('/dbfs'+silver_tbl_path, ignore_errors=True)
-shutil.rmtree('/dbfs'+telco_preds_path, ignore_errors=True)
-
-# COMMAND ----------
-
 # MAGIC %sql
 # MAGIC CREATE DATABASE IF NOT EXISTS cchalc_e2eml
 # MAGIC     COMMENT "CREATE A DATABASE WITH A LOCATION PATH"

@@ -74,13 +74,13 @@ fs = FeatureStoreClient()
 churn_features_df = compute_churn_features(telcoDF)
 
 churn_feature_table = fs.create_feature_table(
-  name='ibm_telco_churn.churn_features',
+  name=f'{database_name}.churn_features',
   keys='customerID',
   schema=churn_features_df.spark.schema(),
   description='These features are derived from the ibm_telco_churn.bronze_customers table in the lakehouse.  I created dummy variables for the categorical columns, cleaned up their names, and added a boolean flag for whether the customer churned or not.  No aggregations were performed.'
 )
 
-fs.write_table(df=churn_features_df.to_spark(), name='ibm_telco_churn.churn_features', mode='overwrite')
+fs.write_table(df=churn_features_df.to_spark(), name=f'{database_name}.churn_features', mode='overwrite')
 
 # COMMAND ----------
 

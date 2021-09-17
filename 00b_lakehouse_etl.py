@@ -21,7 +21,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run ./00_includes
+# MAGIC %run ./00_reset
 
 # COMMAND ----------
 
