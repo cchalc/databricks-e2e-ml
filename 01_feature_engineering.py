@@ -70,6 +70,7 @@ def compute_churn_features(data):
 from databricks.feature_store import FeatureStoreClient
 
 fs = FeatureStoreClient()
+#fs._catalog_client.delete_feature_table(f"{database_name}.churn_features")
 
 churn_features_df = compute_churn_features(telcoDF)
 

@@ -27,10 +27,14 @@ telco_preds_tbl_name = 'telco_preds'
 
 # COMMAND ----------
 
+# clean up feature store
+fs._catalog_client.delete_feature_table(f"{database_name}.churn_features")
+
+# COMMAND ----------
+
 # Delete the old database and tables if needed
 # uncomment if you need a reset
 _ = spark.sql('DROP DATABASE IF EXISTS {} CASCADE'.format(database_name))
-
 
 # Create database to house tables
 # _ = spark.sql('CREATE DATABASE {}'.format(database_name))

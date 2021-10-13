@@ -25,8 +25,12 @@
 
 # COMMAND ----------
 
+# MAGIC %fs ls /home/christopher.chalcraft@databricks.com/ibm-telco-churn/
+
+# COMMAND ----------
+
 # copy the data from driver to DBFS
-dbutils.fs.cp('file:/databricks/driver/Telco-Customer-Churn.csv', driver_to_dbfs_path)
+# dbutils.fs.cp('file:/databricks/driver/Telco-Customer-Churn.csv', driver_to_dbfs_path)
 
 # COMMAND ----------
 
@@ -67,6 +71,10 @@ bronze_df = spark.read.format('csv').schema(schema).option('header','true')\
 bronze_df.write.format('delta').mode('overwrite').save(bronze_tbl_path)
 
 display(bronze_df)
+
+# COMMAND ----------
+
+dbutils.fs.ls(bronze_tbl_path)
 
 # COMMAND ----------
 
