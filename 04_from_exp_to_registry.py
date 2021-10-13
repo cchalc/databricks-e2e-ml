@@ -1,27 +1,4 @@
 # Databricks notebook source
-# MAGIC %md ---
-# MAGIC title: End-to-End MLOps demo with MLFlow, Feature Store and Auto ML, part 4 - registering a model for testing
-# MAGIC authors:
-# MAGIC - Rafi Kurlansik
-# MAGIC tags:
-# MAGIC - python
-# MAGIC - mlflow
-# MAGIC - mlflow-registry
-# MAGIC - lifecycle-management
-# MAGIC - staging
-# MAGIC created_at: 2021-05-01
-# MAGIC updated_at: 2021-05-01
-# MAGIC tldr: End-to-end demo of Databricks for MLOps, including MLflow, the registry, webhooks, scoring, feature store and auto ML. Part 4 - promote model to staging with MLflow registry, to trigger testing
-# MAGIC ---
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC # Notebook Links
-# MAGIC - AWS demo.cloud: [https://demo.cloud.databricks.com/#notebook/10166911](https://demo.cloud.databricks.com/#notebook/10166911)
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC ### Managing the model lifecycle with Model Registry
 # MAGIC 
@@ -52,6 +29,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./00_includes
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC #### Promote to Registry
 # MAGIC ```
@@ -68,22 +49,14 @@ from mlflow.tracking import MlflowClient
 
 client = MlflowClient()
 
-run_id = '0e6044845e604fb5b638d78005aa1bb0' # replace with your own run ID, etc
-model_name = "hhar_churn"
+run_id = '2c3bfc3e67f54e468149263917534a20' # replace with your own run ID, etc
+model_name = f"{database_name}_churn"
 model_uri = f"runs:/{run_id}/model"
 
-client.set_tag(run_id, key='db_table', value='ibm_telco_churn.churn_features')
+client.set_tag(run_id, key='db_table', value=f'{database_name}.churn_features')
 client.set_tag(run_id, key='demographic_vars', value='seniorCitizen,gender_Female')
 
 model_details = mlflow.register_model(model_uri, model_name)
-
-# COMMAND ----------
-
-
-run_id = 'd38152c00ddd4f048eddcb05b3dad31d'
-run_info = client.get_run('d38152c00ddd4f048eddcb05b3dad31d')
-
-run_info.info
 
 # COMMAND ----------
 
@@ -110,7 +83,7 @@ client.update_registered_model(
 client.update_model_version(
   name=model_details.name,
   version=model_details.version,
-  description="This model version was built using sklearn's LogisticRegression."
+  description="This model version was built using sklearn's XGBoost."
 )
 
 # COMMAND ----------
