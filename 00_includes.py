@@ -8,6 +8,7 @@ from pyspark.sql.types import StructType,StructField,DoubleType, StringType, Int
 
 # Set config for database name, file paths, and table names
 database_name = 'cchalc_e2eml'
+# model_name = 'cchalc_e2eml_churn'
 
 # Move file from driver to DBFS
 user = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().apply('user')

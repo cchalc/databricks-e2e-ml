@@ -178,21 +178,23 @@ results.tags
 
 # COMMAND ----------
 
-import requests, json
+# Did not configure Slack webhooks
 
-slack_message = "Registered model '{}' version {} baseline test results: {}".format(model_name, version, results.tags)
-webhook_url = dbutils.secrets.get("rk_webhooks", "slack")
+# import requests, json
 
-body = {'text': slack_message}
-response = requests.post(
-    webhook_url, data=json.dumps(body),
-    headers={'Content-Type': 'application/json'}
-)
-if response.status_code != 200:
-    raise ValueError(
-        'Request to slack returned an error %s, the response is:\n%s'
-        % (response.status_code, response.text)
-)
+# slack_message = "Registered model '{}' version {} baseline test results: {}".format(model_name, version, results.tags)
+# webhook_url = dbutils.secrets.get("rk_webhooks", "slack")
+
+# body = {'text': slack_message}
+# response = requests.post(
+#     webhook_url, data=json.dumps(body),
+#     headers={'Content-Type': 'application/json'}
+# )
+# if response.status_code != 200:
+#     raise ValueError(
+#         'Request to slack returned an error %s, the response is:\n%s'
+#         % (response.status_code, response.text)
+# )
 
 # COMMAND ----------
 

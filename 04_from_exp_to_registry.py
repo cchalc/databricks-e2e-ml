@@ -53,6 +53,8 @@ run_id = '2c3bfc3e67f54e468149263917534a20' # replace with your own run ID, etc
 model_name = f"{database_name}_churn"
 model_uri = f"runs:/{run_id}/model"
 
+# COMMAND ----------
+
 client.set_tag(run_id, key='db_table', value=f'{database_name}.churn_features')
 client.set_tag(run_id, key='demographic_vars', value='seniorCitizen,gender_Female')
 

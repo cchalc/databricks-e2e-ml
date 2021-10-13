@@ -1,27 +1,4 @@
 # Databricks notebook source
-# MAGIC %md ---
-# MAGIC title: End-to-End MLOps demo with MLFlow, Feature Store and Auto ML, part 6 - batch inference
-# MAGIC authors:
-# MAGIC - Rafi Kurlansik
-# MAGIC tags:
-# MAGIC - python
-# MAGIC - mlflow
-# MAGIC - mlflow-registry
-# MAGIC - batch-inference
-# MAGIC - spark-udf
-# MAGIC created_at: 2021-05-01
-# MAGIC updated_at: 2021-05-01
-# MAGIC tldr: End-to-end demo of Databricks for MLOps, including MLflow, the registry, webhooks, scoring, feature store and auto ML. Part 6 - applying a model with MLflow and Spark UDFs for batch inference
-# MAGIC ---
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC # Notebook Links
-# MAGIC - AWS demo.cloud: [https://demo.cloud.databricks.com/#notebook/10166949](https://demo.cloud.databricks.com/#notebook/10166949)
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC ## Churn Prediction Batch Inference
 # MAGIC 
