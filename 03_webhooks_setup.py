@@ -28,6 +28,9 @@
 # MAGIC ___
 # MAGIC 
 # MAGIC <img src="https://github.com/RafiKurlansik/laughing-garbanzo/blob/main/webhooks2.png?raw=true" width = 600>
+# MAGIC 
+# MAGIC - [mlflow REST API](https://mlflow.org/docs/latest/rest-api.html#)
+# MAGIC - [Secrets API](https://docs.databricks.com/dev-tools/api/latest/secrets.html#secretsecretserviceputsecret)
 
 # COMMAND ----------
 
@@ -67,11 +70,11 @@ def mlflow_call_endpoint(endpoint, method, body='{}'):
 # COMMAND ----------
 
 dbutils.widgets.text("model_name", "cchalc_e2eml_churn")
+model_name = dbutils.widgets.get("model_name")
 
 # COMMAND ----------
 
 # Which model in the registry will we create a webhook for?
-model_name = dbutils.widgets.get("model_name")
 
 trigger_job = json.dumps({
   "model_name": model_name,
@@ -79,7 +82,7 @@ trigger_job = json.dumps({
   "description": "Trigger the ops_validation job when a model is moved to staging.",
   "status": "ACTIVE",
   "job_spec": {
-    "job_id": "89952",    # This is our 05_ops_validation notebook
+    "job_id": "90916",    # This is our 05_ops_validation notebook
     "workspace_url": host,
     "access_token": token
   }
@@ -100,25 +103,25 @@ mlflow_call_endpoint("registry-webhooks/create", method = "POST", body = trigger
 
 # COMMAND ----------
 
-# !! Did not configure Slack webhook
 
-# import urllib 
-# import json 
+import urllib 
+import json 
 
-# slack_webhook = dbutils.secrets.get("rk_webhooks", "slack") # You have to set up your own webhook!
+slack_webhook = dbutils.secrets.get("cchalc-webhooks", "e2eml-slack") # You have to set up your own webhook!
+# slack_webhook = dbutils.secrets.get("akv-secrets", "e2demowest-slack-webhook") # You have to set up your own webhook!
 
-# # consider REGISTERED_MODEL_CREATED to run tests and autoamtic deployments to stages 
-# trigger_slack = json.dumps({
-#   "model_name": model_name,
-#   "events": ["TRANSITION_REQUEST_CREATED"],
-#   "description": "Notify the MLOps team that a model has moved from None to Staging.",
-#   "status": "ACTIVE",
-#   "http_url_spec": {
-#     "url": slack_webhook
-#   }
-# })
+# consider REGISTERED_MODEL_CREATED to run tests and autoamtic deployments to stages 
+trigger_slack = json.dumps({
+  "model_name": model_name,
+  "events": ["TRANSITION_REQUEST_CREATED"],
+  "description": "Notify the MLOps team that a model has moved from None to Staging.",
+  "status": "ACTIVE",
+  "http_url_spec": {
+    "url": slack_webhook
+  }
+})
 
-# mlflow_call_endpoint("registry-webhooks/create", method = "POST", body = trigger_slack)
+mlflow_call_endpoint("registry-webhooks/create", method = "POST", body = trigger_slack)
 
 # COMMAND ----------
 
@@ -140,7 +143,7 @@ trigger_job = json.dumps({
   "events": ["MODEL_VERSION_TRANSITIONED_STAGE"],
   "description": "Trigger the ops_validation job when a model is moved to staging.",
   "job_spec": {
-    "job_id": "89952",
+    "job_id": "90916",
     "workspace_url": host,
     "access_token": token
   }
@@ -157,19 +160,19 @@ mlflow_call_endpoint("registry-webhooks/create", method = "POST", body = trigger
 
 # Did not configure Slack webhook
 
-# import urllib 
-# import json 
+import urllib 
+import json 
 
-# trigger_slack = json.dumps({
-#   "model_name": model_name,
-#   "events": ["MODEL_VERSION_TRANSITIONED_STAGE"],
-#   "description": "Notify the MLOps team that a model has moved from None to Staging.",
-#   "http_url_spec": {
-#     "url": slack_webhook
-#   }
-# })
+trigger_slack = json.dumps({
+  "model_name": model_name,
+  "events": ["MODEL_VERSION_TRANSITIONED_STAGE"],
+  "description": "Notify the MLOps team that a model has moved from None to Staging.",
+  "http_url_spec": {
+    "url": slack_webhook
+  }
+})
 
-# mlflow_call_endpoint("registry-webhooks/create", method = "POST", body = trigger_slack)
+mlflow_call_endpoint("registry-webhooks/create", method = "POST", body = trigger_slack)
 
 # COMMAND ----------
 

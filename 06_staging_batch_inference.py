@@ -6,6 +6,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./00_includes
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC #### Load Model
 # MAGIC 
@@ -15,7 +19,7 @@
 
 import mlflow
 
-model = mlflow.pyfunc.spark_udf(spark, model_uri="models:/hhar_churn/staging") # may need to replace with your own model name
+model = mlflow.pyfunc.spark_udf(spark, model_uri=f"models:/{database_name}_churn/staging") # may need to replace with your own model name
 
 # COMMAND ----------
 
@@ -27,7 +31,7 @@ model = mlflow.pyfunc.spark_udf(spark, model_uri="models:/hhar_churn/staging") #
 from databricks.feature_store import FeatureStoreClient
 
 fs = FeatureStoreClient()
-features = fs.read_table('ibm_telco_churn.churn_features')
+features = fs.read_table(f'{database_name}.churn_features')
 
 # COMMAND ----------
 
@@ -46,4 +50,4 @@ display(predictions.select("customerId", "predictions"))
 
 # COMMAND ----------
 
-predictions.write.format("delta").mode("append").saveAsTable("ibm_telco_churn.churn_preds")
+predictions.write.format("delta").mode("append").saveAsTable(f"{database_name}.churn_preds")

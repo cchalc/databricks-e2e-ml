@@ -28,6 +28,9 @@ telco_preds_tbl_name = 'telco_preds'
 # COMMAND ----------
 
 # clean up feature store
+from databricks.feature_store import FeatureStoreClient
+
+fs = FeatureStoreClient()
 fs._catalog_client.delete_feature_table(f"{database_name}.churn_features")
 
 # COMMAND ----------

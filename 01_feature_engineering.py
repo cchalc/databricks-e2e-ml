@@ -64,6 +64,8 @@ def compute_churn_features(data):
 
 # MAGIC %md
 # MAGIC #### Compute and write features
+# MAGIC - [Feature Store Python API Reference](https://docs.databricks.com/dev-tools/api/python/latest/index.html)
+# MAGIC - [Feature Store Job Schedule](https://docs.databricks.com/applications/machine-learning/feature-store/feature-tables.html#schedule-a-job-to-update-a-feature-table)
 
 # COMMAND ----------
 

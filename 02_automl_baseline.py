@@ -5,15 +5,6 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC # NOTE! Yes, read!
-# MAGIC 
-# MAGIC This is not a notebook you execute. It's an example of the notebook auto ML generates if you use the auto ML functionality in Databricks on the table you just generated.
-# MAGIC 
-# MAGIC # Yes, Everything Below Is Auto-Generated!
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC # XGBoost training
 # MAGIC This is an auto-generated notebook. To reproduce these results, attach this notebook to the **Shared Autoscaling APJ** cluster and rerun it.
 # MAGIC - Compare trials in the [MLflow experiment](#mlflow/experiments/3118490411230128/s?orderByKey=metrics.%60val_f1_score%60&orderByAsc=false)
