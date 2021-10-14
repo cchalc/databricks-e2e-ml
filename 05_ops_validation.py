@@ -11,6 +11,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./00_includes
+
+# COMMAND ----------
+
 import mlflow, json
 from mlflow.tracking import MlflowClient
 from databricks.feature_store import FeatureStoreClient
@@ -26,7 +30,7 @@ try:
   if 'to_stage' in registry_event and registry_event['to_stage'] != 'Staging':
     dbutils.notebook.exit()
 except Exception:
-  model_name = 'hhar_churn'
+  model_name = f'{database_namme}_churn'
   version = "1"
 print(model_name, version)
 
@@ -178,23 +182,22 @@ results.tags
 
 # COMMAND ----------
 
-# Did not configure Slack webhooks
 
-# import requests, json
+import requests, json
 
-# slack_message = "Registered model '{}' version {} baseline test results: {}".format(model_name, version, results.tags)
-# webhook_url = dbutils.secrets.get("rk_webhooks", "slack")
+slack_message = "Registered model '{}' version {} baseline test results: {}".format(model_name, version, results.tags)
+webhook_url = slack_url
 
-# body = {'text': slack_message}
-# response = requests.post(
-#     webhook_url, data=json.dumps(body),
-#     headers={'Content-Type': 'application/json'}
-# )
-# if response.status_code != 200:
-#     raise ValueError(
-#         'Request to slack returned an error %s, the response is:\n%s'
-#         % (response.status_code, response.text)
-# )
+body = {'text': slack_message}
+response = requests.post(
+    webhook_url, data=json.dumps(body),
+    headers={'Content-Type': 'application/json'}
+)
+if response.status_code != 200:
+    raise ValueError(
+        'Request to slack returned an error %s, the response is:\n%s'
+        % (response.status_code, response.text)
+)
 
 # COMMAND ----------
 
