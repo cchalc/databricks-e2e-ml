@@ -186,7 +186,7 @@ results.tags
 import requests, json
 
 slack_message = "Registered model '{}' version {} baseline test results: {}".format(model_name, version, results.tags)
-webhook_url = slack_url
+webhook_url = slack_webhook
 
 body = {'text': slack_message}
 response = requests.post(
