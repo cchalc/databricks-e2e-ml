@@ -15,6 +15,13 @@
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC - [Feature Store Job Schedule](https://docs.databricks.com/applications/machine-learning/feature-store/feature-tables.html#schedule-a-job-to-update-a-feature-table)
+# MAGIC - [Azure online feature store](https://docs.microsoft.com/en-ca/azure/databricks/applications/machine-learning/feature-store/concepts#--online-store)
+# MAGIC - [Publish to Azure online feature store](https://docs.microsoft.com/en-ca/azure/databricks/applications/machine-learning/feature-store/feature-tables#publish-features-to-an-online-feature-store)
+
+# COMMAND ----------
+
 from databricks.feature_store import FeatureStoreClient
 
 # Set config for database name, file paths, and table names

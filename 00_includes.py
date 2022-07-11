@@ -37,3 +37,7 @@ telco_preds_tbl_name = 'telco_preds'
 
 # MAGIC %sql
 # MAGIC USE cchalc_e2eml
+
+# COMMAND ----------
+
+slack_webhook = "https://hooks.slack.com/services/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"

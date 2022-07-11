@@ -51,3 +51,7 @@ display(predictions.select("customerId", "predictions"))
 # COMMAND ----------
 
 predictions.write.format("delta").mode("append").saveAsTable(f"{database_name}.churn_preds")
+
+# COMMAND ----------
+
+

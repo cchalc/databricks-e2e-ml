@@ -24,21 +24,34 @@ display(telcoDF)
 
 # COMMAND ----------
 
+# import pyspark.pandas as ps
+# tf = telcoDF.to_pandas_on_spark()
+# dummy = ps.get_dummies(tf,
+#                        columns=['gender', 'partner', 'dependents',
+#                                 'phoneService', 'multipleLines', 'internetService',
+#                                 'onlineSecurity', 'onlineBackup', 'deviceProtection',
+#                                 'techSupport', 'streamingTV', 'streamingMovies',
+#                                 'contract', 'paperlessBilling', 'paymentMethod'],
+#                        dtype = 'int64'
+#                       )
+
+# COMMAND ----------
+
 # MAGIC %md
-# MAGIC Using `koalas` to scale my teammates' `pandas` code.
+# MAGIC ##### Pandas API on Spark
 
 # COMMAND ----------
 
 from databricks.feature_store import feature_table
-import databricks.koalas as ks
+import pyspark.pandas as ps
 
 def compute_churn_features(data):
   
-  # Convert to koalas
-  data = data.to_koalas()
+  # Convert to pandas
+  data = data.to_pandas_on_spark()
   
   # OHE
-  data = ks.get_dummies(data, 
+  data = ps.get_dummies(data, 
                         columns=['gender', 'partner', 'dependents',
                                  'phoneService', 'multipleLines', 'internetService',
                                  'onlineSecurity', 'onlineBackup', 'deviceProtection',
@@ -51,12 +64,13 @@ def compute_churn_features(data):
   data = data.rename(columns = {'churnString': 'churn'})
   
   # Clean up column names
-  data.columns = data.columns.str.replace(' ', '')
-  data.columns = data.columns.str.replace('(', '-')
-  data.columns = data.columns.str.replace(')', '')
+  data.columns = data.columns.str.replace(' ', '', regex=True)
+  data.columns = data.columns.str.replace('(', '-', regex=True)
+  data.columns = data.columns.str.replace(')', '', regex=True)
   
   # Drop missing values
   data = data.dropna()
+  data = data.to_spark()
   
   return data
 
@@ -65,25 +79,42 @@ def compute_churn_features(data):
 # MAGIC %md
 # MAGIC #### Compute and write features
 # MAGIC - [Feature Store Python API Reference](https://docs.databricks.com/dev-tools/api/python/latest/index.html)
-# MAGIC - [Feature Store Job Schedule](https://docs.databricks.com/applications/machine-learning/feature-store/feature-tables.html#schedule-a-job-to-update-a-feature-table)
+# MAGIC - [Work with Feature Store Tables](https://docs.databricks.com/applications/machine-learning/feature-store/feature-tables.html#register-an-existing-delta-table-as-a-feature-table)
+
+# COMMAND ----------
+
+# # clean up feature store
+# from databricks.feature_store import FeatureStoreClient
+
+# fs = FeatureStoreClient()
+# fs._catalog_client.delete_feature_table(f"{database_name}.churn_features")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC --drop table churn_features
 
 # COMMAND ----------
 
 from databricks.feature_store import FeatureStoreClient
 
 fs = FeatureStoreClient()
-#fs._catalog_client.delete_feature_table(f"{database_name}.churn_features")
+# fs._catalog_client.delete_feature_table(f"{database_name}.churn_features")
 
 churn_features_df = compute_churn_features(telcoDF)
 
-churn_feature_table = fs.create_feature_table(
+churn_feature_table = fs.create_table(
   name=f'{database_name}.churn_features',
-  keys='customerID',
-  schema=churn_features_df.spark.schema(),
+  primary_keys=['customerID'],
+  df=churn_features_df,
   description='These features are derived from the ibm_telco_churn.bronze_customers table in the lakehouse.  I created dummy variables for the categorical columns, cleaned up their names, and added a boolean flag for whether the customer churned or not.  No aggregations were performed.'
 )
 
-fs.write_table(df=churn_features_df.to_spark(), name=f'{database_name}.churn_features', mode='overwrite')
+fs.write_table(
+  name=f'{database_name}.churn_features',
+  df=churn_features_df,
+  mode='overwrite'
+)
 
 # COMMAND ----------
 

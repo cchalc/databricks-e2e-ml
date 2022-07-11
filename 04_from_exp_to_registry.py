@@ -49,7 +49,7 @@ from mlflow.tracking import MlflowClient
 
 client = MlflowClient()
 
-run_id = '2c3bfc3e67f54e468149263917534a20' # replace with your own run ID, etc
+run_id = 'c237e096769d42d6a4cb42a2ad36763b' # replace with your own run ID, etc
 model_name = f"{database_name}_churn"
 model_uri = f"runs:/{run_id}/model"
 
@@ -85,7 +85,7 @@ client.update_registered_model(
 client.update_model_version(
   name=model_details.name,
   version=model_details.version,
-  description="This model version was built using sklearn's XGBoost."
+  description="This model version was built using sklearn's Logistic Regression."
 )
 
 # COMMAND ----------

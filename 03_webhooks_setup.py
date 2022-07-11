@@ -34,6 +34,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./00_includes
+
+# COMMAND ----------
+
 # Helper Functions
 import mlflow
 from mlflow.utils.rest_utils import http_request
@@ -107,7 +111,7 @@ mlflow_call_endpoint("registry-webhooks/create", method = "POST", body = trigger
 import urllib 
 import json 
 
-slack_webhook = dbutils.secrets.get("cchalc-webhooks", "e2eml-slack") # You have to set up your own webhook!
+# slack_webhook = dbutils.secrets.get("cchalc-webhooks", "e2eml-slack") # You have to set up your own webhook!
 # slack_webhook = dbutils.secrets.get("akv-secrets", "e2demowest-slack-webhook") # You have to set up your own webhook!
 
 # consider REGISTERED_MODEL_CREATED to run tests and autoamtic deployments to stages 
@@ -129,27 +133,6 @@ mlflow_call_endpoint("registry-webhooks/create", method = "POST", body = trigger
 # MAGIC #### Model Version Transitioned Stage
 # MAGIC 
 # MAGIC These fire whenever a model successfully transitions to a particular stage.
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ##### Trigger Job
-
-# COMMAND ----------
-
-# Which model in the registry will we create a webhook for?
-trigger_job = json.dumps({
-  "model_name": model_name,
-  "events": ["MODEL_VERSION_TRANSITIONED_STAGE"],
-  "description": "Trigger the ops_validation job when a model is moved to staging.",
-  "job_spec": {
-    "job_id": "90916",
-    "workspace_url": host,
-    "access_token": token
-  }
-})
-
-mlflow_call_endpoint("registry-webhooks/create", method = "POST", body = trigger_job)
 
 # COMMAND ----------
 
@@ -200,7 +183,7 @@ mlflow_call_endpoint("registry-webhooks/list", method = "GET", body = list_model
 # Remove a webhook
 mlflow_call_endpoint("registry-webhooks/delete",
                      method="DELETE",
-                     body = json.dumps({'id': 'c19ce9793122482d972862e4934ca416'}))
+                     body = json.dumps({'id': '2b1e92b3a83640fbaefa3b5360a6da2f'}))
 
 # COMMAND ----------
 
